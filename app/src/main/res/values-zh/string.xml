@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">简历</string>
+    <string name="education">教育经历</string>
+    <string name="work_experience">工作经历</string>
+    <string name="edit_education">修改教育背景</string>
+    <string name="change_work">修改工作经历</string>
+    <string name="change_name">修改姓名</string>
+    <string name="add_education">添加工作经历</string>
+
+    <string name="School_Name">学校名称</string>
+    <string name="Major">专业</string>
+    <string name="Start_Date">开始日期</string>
+    <string name="End_Date">结束日期</string>
+    <string name="Courses">课程（每行一个）</string>
+    <string name="Save">保存</string>
+
+    <string name="Name">姓名</string>
+    <string name="Email">邮箱</string>
+
+    <string name="add_work_experience">添加工作经历</string>
+    <string name="Work_Disc">工作介绍</string>
+    <string name="work_title">工作岗位</string>
+
+
+
+</resources>

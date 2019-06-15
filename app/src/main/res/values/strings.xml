@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Resume</string>
+    <string name="education">Education</string>
+    <string name="work_experience">Work Experience</string>
+    <string name="add_education">ADD Education</string>
+
+    <string name="edit_education">Edit Education</string>
+    <string name="change_work">Edit Work Experience</string>
+    <string name="change_name">Change Name</string>
+
+    <string name="School_Name">School Name</string>
+    <string name="Major">Major</string>
+    <string name="Start_Date">Start Date</string>
+    <string name="End_Date">End Date</string>
+    <string name="Courses">Courses(one line per course)</string>
+    <string name="Save">Save</string>
+
+    <string name="Name">Name</string>
+    <string name="Email">Email</string>
+
+    <string name="add_work_experience">Add Work Experience</string>
+    <string name="Work_Disc">Work Description</string>
+    <string name="work_title">Work Title</string>
+
+</resources>
