@@ -220,12 +220,7 @@ public class MainActivity extends AppCompatActivity {
         basicInfo.name = "Chijun Sha";
         basicInfo.email = "kevin.sha.cj@gmail.com";
 
-        ID i = new Project();
-        ((Project) i).description = new ArrayList<>();
-        ((Project) i).description.add("dsac");
-        ((Project) i).language="dasd";
-        ((Project) i).title = "dxx";
-        projects.add(i);
+
     }
 
     public static String formatCourses(List<String> items) {
