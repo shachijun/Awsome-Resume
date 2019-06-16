@@ -18,7 +18,7 @@
                 android:layout_height="0dp"
                 android:gravity="center"
                 android:layout_weight="1"
-                android:id="@+id/work_title"
+                android:id="@+id/Work_Title"
                 android:hint="@string/work_title"/>
             />
             <LinearLayout
@@ -43,7 +43,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/School_Courses"
+                android:id="@+id/Work_Des"
                 android:hint="@string/Work_Disc" />
         </LinearLayout>
     </LinearLayout>

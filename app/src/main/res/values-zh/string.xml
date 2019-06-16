@@ -21,7 +21,13 @@
     <string name="add_work_experience">添加工作经历</string>
     <string name="Work_Disc">工作介绍</string>
     <string name="work_title">工作岗位</string>
+    <string name="edit_work">编辑工作</string>
 
+
+    <string name="Project">项目</string>
+    <string name="project_language">项目编程语言</string>
+    <string name="project_des">项目介绍</string>
+    <string name="edit_project">编辑项目</string>
 
 
 </resources>

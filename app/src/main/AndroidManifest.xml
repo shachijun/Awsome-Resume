@@ -20,6 +20,9 @@
 
         <activity android:name=".EducationEdit"/>
         <activity android:name=".BasicInfoChange"/>
+        <activity android:name=".WorkExperienceEdit"/>
+        <activity android:name=".ProjectEdit"/>
+
 
 
     </application>

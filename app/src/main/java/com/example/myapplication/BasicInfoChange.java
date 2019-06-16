@@ -31,7 +31,7 @@ public class BasicInfoChange extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_education_edit, menu);
+        getMenuInflater().inflate(R.menu.edit, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -21,5 +21,13 @@
     <string name="add_work_experience">Add Work Experience</string>
     <string name="Work_Disc">Work Description</string>
     <string name="work_title">Work Title</string>
+    <string name="edit_work">Edit Work</string>
+
+    <string name="Project">Project</string>
+    <string name="project_language">Project Language</string>
+    <string name="project_des">Project Description</string>
+    <string name="edit_project">Edit Project</string>
+    <string name="add_project">Add Project</string>
+
 
 </resources>

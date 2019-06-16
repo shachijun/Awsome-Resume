@@ -130,6 +130,38 @@
                     android:orientation="vertical" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:layout_marginBottom="@dimen/spacing_small"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/Project"
+                        android:textSize="@dimen/word_large" />
+                    <ImageButton
+                        android:id="@+id/add_project"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:contentDescription="@string/add_project"
+                        android:src="@drawable/ic_baseline_add_24px" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ProjectContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_small"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
 
 
 

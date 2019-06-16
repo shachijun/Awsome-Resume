@@ -7,11 +7,9 @@ import com.example.myapplication.util.DateUtils;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
-public class Education implements Parcelable {
 
-    public String id;
+public class Education extends ID implements Parcelable  {
 
     public String school;
 
@@ -24,7 +22,7 @@ public class Education implements Parcelable {
     public List<String> courses;
 
     public Education(){
-        id = UUID.randomUUID().toString();
+        super();
     }
 
     //解密
@@ -64,6 +62,4 @@ public class Education implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-
 }
