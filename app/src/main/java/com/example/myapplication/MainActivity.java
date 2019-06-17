@@ -1,7 +1,10 @@
 package com.example.myapplication;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.myapplication.model.BasicInfo;
 import com.example.myapplication.model.Education;
@@ -19,6 +23,7 @@ import com.example.myapplication.model.WorkExperience;
 import com.example.myapplication.util.Data;
 import com.example.myapplication.util.DateUtils;
 import com.example.myapplication.util.ImageLoad;
+import com.example.myapplication.util.PermissionUtils;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
@@ -45,20 +50,30 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!PermissionUtils.checkPermission(MainActivity.this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            PermissionUtils.requestReadExternalStoragePermission(MainActivity.this);
+        }
         InitializeData();
         setupUI();
     }
 
-    private void checkDuplicate(List<ID> list, ID result){
-        for(int i = 0; i < list.size(); i++){
-            if (list.get(i).id.equals(result.id)){
-                list.set(i, result);
-                return;
-            }
-        }
-        list.add(result);
-    }
+
     //返回到主程序 从上一个程序
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PermissionUtils.REQ_CODE_WRITE_EXTERNAL_STORAGE
+                && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        }else{
+            Toast.makeText(this, "Did not have permission", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

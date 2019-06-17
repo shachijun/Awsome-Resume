@@ -67,18 +67,22 @@ import java.lang.reflect.Type;
  editor.apply();
 
  String value = sp.getString("educationList","");//key, default 转化回
+
+ 注意：用share存储位置就可以了，存储real path就可以，不要存储URI
+ Credit to: https://stackoverflow.com/questions/4181774/show-image-view-from-file-path
+ https://stackoverflow.com/questions/15432592/get-file-path-of-image-on-android
  ***************************************************************************/
 
 public class Data {
-    private static Gson gsonForSerialization = new GsonBuilder()
-            .registerTypeAdapter(Uri.class, new UriSerializer())
-            .create();
+    private static Gson gsonForSerialization = new GsonBuilder().create();
+//            .registerTypeAdapter(Uri.class, new UriSerializer())
+//            .create();
 
-    private static Gson gsonForDeserialization = new GsonBuilder()
-            .registerTypeAdapter(Uri.class, new UriDeserializer())
-            .create();
+    private static Gson gsonForDeserialization = new GsonBuilder().create();
+//            .registerTypeAdapter(Uri.class, new UriDeserializer())
+//            .create();
 
-    private static String PREF_NAME = "DATA_SAVING";
+    private static String PREF_NAME = "models";
 
     public static void save(Context context, String key, Object object) {
         SharedPreferences sp = context.getApplicationContext().getSharedPreferences(

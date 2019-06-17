@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,10 +16,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.myapplication.model.BasicInfo;
 import com.example.myapplication.util.ImageLoad;
 import com.example.myapplication.util.PermissionUtils;
+
 
 public class BasicInfoChange extends AppCompatActivity {
     public static final String KEY_BASIC_INFO = "Personal_Info_Change";
@@ -34,14 +37,42 @@ public class BasicInfoChange extends AppCompatActivity {
         setupUI();
         setTitle("Edit Information");
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.edit, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            finish();
+            return true;
+        }else if(item.getItemId() == R.id.save){
+            saveAndExit();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        /*old*/
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_CODE_PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             Uri imageUri = data.getData();
             if (imageUri != null) {
-                basicInfo.photo = imageUri;
-                showImage(imageUri);
+                basicInfo.photo = getRealPathFromURI(imageUri);
+                showImage(basicInfo.photo);
             }
         }
     }
@@ -60,6 +91,8 @@ public class BasicInfoChange extends AppCompatActivity {
                 && grantResults.length > 0
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             pickImage();
+        }else{
+            Toast.makeText(this, "Did not have permission", Toast.LENGTH_SHORT).show();
         }
     }
     /******************************************************************************************************************************/
@@ -86,25 +119,12 @@ public class BasicInfoChange extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.edit, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
-            return true;
-        }else if(item.getItemId() == R.id.save){
-            saveAndExit();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     private void saveAndExit() {
+        if (basicInfo == null) {
+            basicInfo = new BasicInfo();
+        }
         basicInfo.name = ((EditText)findViewById(R.id.Name)).getText().toString();
         basicInfo.email = ((EditText)findViewById(R.id.email)).getText().toString();
 
@@ -112,11 +132,10 @@ public class BasicInfoChange extends AppCompatActivity {
         Intent resultIntent = new Intent();//intend as hashmap -> key,value
         resultIntent.putExtra(KEY_BASIC_INFO, basicInfo);//putExtra 放的是基本的信息，不能放自己建立的Object, serialize and deserialize (加密解密)
         setResult(Activity.RESULT_OK, resultIntent);
-
         finish();
     }
 
-    private void showImage(@NonNull Uri imageUri) {
+    private void showImage(@NonNull String imageUri) {
         ImageView imageView = findViewById(R.id.basic_info_edit_image);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
