@@ -5,8 +5,9 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
-//import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,7 +16,10 @@ import com.example.myapplication.model.Education;
 import com.example.myapplication.model.ID;
 import com.example.myapplication.model.Project;
 import com.example.myapplication.model.WorkExperience;
+import com.example.myapplication.util.Data;
 import com.example.myapplication.util.DateUtils;
+import com.example.myapplication.util.ImageLoad;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +31,14 @@ public class MainActivity extends AppCompatActivity {
     private static final int Request_Code_Project_Edit = 103;
 
     private BasicInfo basicInfo;
-    private List<ID> educations = new ArrayList<>();
-    private List<ID> workExperiences = new ArrayList<>();
-    private List<ID> projects = new ArrayList<>();
+    private List<Education> educations = new ArrayList<>();
+    private List<WorkExperience> workExperiences = new ArrayList<>();
+    private List<Project> projects = new ArrayList<>();
+
+    private static final String MODEL_EDUCATIONS = "educations";
+    private static final String MODEL_EXPERIENCES = "work_experiences";
+    private static final String MODEL_PROJECTS = "projects";
+    private static final String MODEL_BASIC_INFO = "basic_info";
 
 
 
@@ -53,24 +62,29 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Request_Code_Education_Edit && resultCode == Activity.RESULT_OK){
-            Education result = data.getParcelableExtra(EducationEdit.KEY_EDUCATION);
-            //find if need replace;
-            checkDuplicate(educations, result);
-            setupEducationsUI();    //form validation
-        } else if(requestCode == Request_Code_Basic_Info_Edit && resultCode == Activity.RESULT_OK){
-            basicInfo = data.getParcelableExtra(BasicInfoChange.KEY_BASIC_INFO);
-            setupBasicInfoUI();
-        }else if (requestCode == Request_Code_Work_Experience_Edit && resultCode == Activity.RESULT_OK){
-            WorkExperience result = data.getParcelableExtra(WorkExperienceEdit.KEY_WORK_EXPERIENCE);
-            //find if need replace;
-            checkDuplicate(workExperiences, result);
-            setupWorkssUI();    //form validation
-        }else if (requestCode == Request_Code_Project_Edit && resultCode == Activity.RESULT_OK){
-            Project result = data.getParcelableExtra(ProjectEdit.KEY_PROJECT_EDIT);
-            //find if need replace;
-            checkDuplicate(projects, result);
-            setupProjectsUI();    //form validation
+        if(resultCode == Activity.RESULT_OK) {
+            switch (requestCode){
+                case Request_Code_Basic_Info_Edit:
+                    basicInfo = data.getParcelableExtra(BasicInfoChange.KEY_BASIC_INFO);
+                    UpdateBasicInfo();
+                    setupBasicInfoUI();
+                    break;
+                case Request_Code_Education_Edit:
+                    Education education = data.getParcelableExtra(EducationEdit.KEY_EDUCATION);
+                    UpdateEducation(education);
+                    setupEducationsUI();
+                    break;
+                case Request_Code_Work_Experience_Edit:
+                    WorkExperience work = data.getParcelableExtra(WorkExperienceEdit.KEY_WORK_EXPERIENCE);
+                    UpdateWorkExperience(work);
+                    setupWorkssUI();
+                    break;
+                case Request_Code_Project_Edit:
+                    Project project = data.getParcelableExtra(ProjectEdit.KEY_PROJECT_EDIT);
+                    UpdateProject(project);
+                    setupProjectsUI();
+                    break;
+            }
         }
     }
 
@@ -81,11 +95,20 @@ public class MainActivity extends AppCompatActivity {
         setupWorkssUI();
         setupProjectsUI();
     }
-
+    /*
+    * edit different UI
+    * ****************************************************************************************************/
     //basic info edit
     private void setupBasicInfoUI() {
-        ((TextView) findViewById(R.id.name)).setText(basicInfo.name);
-        ((TextView) findViewById(R.id.email)).setText(basicInfo.email);
+        ((TextView) findViewById(R.id.name)).setText(TextUtils.isEmpty(basicInfo.name) ? "Your name" : basicInfo.name);
+        ((TextView) findViewById(R.id.email)).setText(TextUtils.isEmpty(basicInfo.email) ? "Your email" : basicInfo.email);
+        ImageView userPicture = findViewById(R.id.user_pic);
+        if (basicInfo.photo != null) {
+            ImageLoad.loadImage(this, basicInfo.photo, userPicture);
+        } else {
+            userPicture.setImageResource(R.drawable.my_pic);
+        }
+
         findViewById(R.id.NameChange).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
         });
         return view;
     }
-
     private void setupEducationsUI() {
         LinearLayout educationContainer = (LinearLayout) findViewById(R.id.EducationContainer);
         educationContainer.removeAllViews();
@@ -132,7 +154,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     //Work Experience get and edit
     private View getWorkView(final WorkExperience e){
@@ -170,8 +191,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-
     //Project get and edit
     private View getProjectView(final Project e){
         View view = getLayoutInflater().inflate(R.layout.project_item,null);
@@ -208,19 +227,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
     /*
-    This is common data, add data below
-     */
+     * Initialize Data
+     * ****************************************************************************************************/
     private void InitializeData() {
-        basicInfo = new BasicInfo();
-        basicInfo.name = "Chijun Sha";
-        basicInfo.email = "kevin.sha.cj@gmail.com";
+        BasicInfo savedBasicInfo = Data.read(this,
+                MODEL_BASIC_INFO,
+                new TypeToken<BasicInfo>(){});
+        basicInfo = savedBasicInfo == null ? new BasicInfo() : savedBasicInfo;
 
+        List<Education> savedEducation = Data.read(this,
+                MODEL_EDUCATIONS,
+                new TypeToken<List<Education>>(){});
 
+        educations = savedEducation == null ? new ArrayList<Education>() : savedEducation;
+
+        List<WorkExperience> savedExperience = Data.read(this,
+                MODEL_EXPERIENCES,
+                new TypeToken<List<WorkExperience>>(){});
+        workExperiences = savedExperience == null ? new ArrayList<WorkExperience>() : savedExperience;
+
+        List<Project> savedProjects = Data.read(this,
+                MODEL_PROJECTS,
+                new TypeToken<List<Project>>(){});
+        projects = savedProjects == null ? new ArrayList<Project>() : savedProjects;
     }
 
     public static String formatCourses(List<String> items) {
@@ -234,4 +264,52 @@ public class MainActivity extends AppCompatActivity {
         return sb.toString();
     }
 
+    /*
+    * Update data:
+    * ************************************************************/
+    private void UpdateBasicInfo(){
+        Data.save(this, MODEL_BASIC_INFO, basicInfo);
+    }
+    private void UpdateEducation(Education e){
+        boolean found = false;
+        for (int i = 0; i < educations.size(); ++i) {
+            if (educations.get(i).id.equals(e.id)) {
+                found = true;
+                educations.set(i, e);
+                break;
+            }
+        }
+        if (!found) {
+            educations.add(e);
+        }
+        Data.save(this, MODEL_EDUCATIONS,educations);
+    }
+    private void UpdateWorkExperience(WorkExperience w){
+        boolean found = false;
+        for (int i = 0; i < workExperiences.size(); ++i) {
+            if (workExperiences.get(i).id.equals(w.id)) {
+                found = true;
+                workExperiences.set(i, w);
+                break;
+            }
+        }
+        if (!found) {
+            workExperiences.add(w);
+        }
+        Data.save(this, MODEL_EXPERIENCES, workExperiences);
+    }
+    private void UpdateProject(Project p){
+        boolean found = false;
+        for (int i = 0; i < projects.size(); ++i) {
+            if (projects.get(i).id.equals(p.id)) {
+                found = true;
+                projects.set(i, p);
+                break;
+            }
+        }
+        if (!found) {
+            projects.add(p);
+        }
+        Data.save(this, MODEL_PROJECTS, projects);
+    }
 }
