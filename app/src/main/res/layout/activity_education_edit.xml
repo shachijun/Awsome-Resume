@@ -50,6 +50,13 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/School_Courses"
                 android:hint="@string/Courses" />
+            <Button
+                android:layout_marginTop="@dimen/spacing_large"
+                android:id="@+id/delete"
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/delete"/>
         </LinearLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

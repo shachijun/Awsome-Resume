@@ -101,6 +101,9 @@ public class BasicInfoChange extends AppCompatActivity {
         ((EditText)findViewById(R.id.email)).setText(basicInfo.email);
         if (basicInfo.photo != null) {
             showImage(basicInfo.photo);
+        }else{
+            ImageView imageView = findViewById(R.id.basic_info_edit_image);
+            imageView.setImageResource(R.drawable.my_pic);
         }
         findViewById(R.id.basic_info_edit_image_layout).setOnClickListener(new View.OnClickListener() {
             @Override

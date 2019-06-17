@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -27,7 +30,6 @@ public class EducationEdit extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_education_edit);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);//返回符号
         education = getIntent().getParcelableExtra(KEY_EDUCATION);
         if(education != null){
@@ -42,7 +44,33 @@ public class EducationEdit extends AppCompatActivity {
         ((EditText)findViewById(R.id.School_Courses)).setText(TextUtils.join("\n", education.courses));
         ((EditText)findViewById(R.id.School_startDate)).setText(DateUtils.dateToString(education.startDate));
         ((EditText)findViewById(R.id.School_endDate)).setText(DateUtils.dateToString(education.endDate));
+        findViewById(R.id.delete).setVisibility(View.VISIBLE);
+        findViewById(R.id.delete).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder ab = new AlertDialog.Builder(EducationEdit.this);
+                ab.setMessage("Are you sure to delete?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
+            }
+        });
     }
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra(KEY_EDUCATION, education.id);
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    break;
+            }
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

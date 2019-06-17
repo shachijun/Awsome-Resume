@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 
 
@@ -37,7 +40,33 @@ public class ProjectEdit extends AppCompatActivity {
         ((EditText)findViewById(R.id.Project)).setText(project.title);
         ((EditText)findViewById(R.id.project_language)).setText(project.language);
         ((EditText)findViewById(R.id.project_des)).setText(TextUtils.join("\n", project.description));
+        findViewById(R.id.delete).setVisibility(View.VISIBLE);
+        findViewById(R.id.delete).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder ab = new AlertDialog.Builder(ProjectEdit.this);
+                ab.setMessage("Are you sure to delete?").setPositiveButton("Yes", dialogClickListener)
+                        .setNegativeButton("No", dialogClickListener).show();
+            }
+        });
     }
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra(KEY_PROJECT_EDIT, project.id);
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
+                    break;
+
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    break;
+            }
+        }
+    };
 
 
     @Override

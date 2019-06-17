@@ -54,6 +54,7 @@ import java.lang.reflect.Type;
  //json: object -> string && string -> object
  Gson gson = new Gson();
  String ObjToStr = gson.toJson(projects);
+
  Type type = new TypeToken<List<ID>>() {}.getType();
  projects = gson.fromJson(ObjToStr, type);
  //转换URI写成global 见上面
@@ -102,19 +103,20 @@ public class Data {
             return null;
         }
     }
-
-    private static class UriSerializer implements JsonSerializer<Uri> {
-        @Override
-        public JsonElement serialize(Uri src, Type typeOfSrc, JsonSerializationContext context) {
-            return new JsonPrimitive(src.toString());
-        }
-    }
-
-    private static class UriDeserializer implements JsonDeserializer<Uri> {
-        @Override
-        public Uri deserialize(JsonElement src, Type srcType, JsonDeserializationContext context) throws JsonParseException {
-            return Uri.parse(src.getAsString());
-        }
-    }
-
 }
+
+//    private static class UriSerializer implements JsonSerializer<Uri> {
+//        @Override
+//        public JsonElement serialize(Uri src, Type typeOfSrc, JsonSerializationContext context) {
+//            return new JsonPrimitive(src.toString());
+//        }
+//    }
+//
+//    private static class UriDeserializer implements JsonDeserializer<Uri> {
+//        @Override
+//        public Uri deserialize(JsonElement src, Type srcType, JsonDeserializationContext context) throws JsonParseException {
+//            return Uri.parse(src.getAsString());
+//        }
+//    }
+
+//}

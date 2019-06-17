@@ -85,18 +85,33 @@ public class MainActivity extends AppCompatActivity {
                     setupBasicInfoUI();
                     break;
                 case Request_Code_Education_Edit:
-                    Education education = data.getParcelableExtra(EducationEdit.KEY_EDUCATION);
-                    UpdateEducation(education);
+                    String EducationID = data.getStringExtra(EducationEdit.KEY_EDUCATION);
+                    if(EducationID != null){
+                        DeleteEducation(EducationID);
+                    }else{
+                        Education education = data.getParcelableExtra(EducationEdit.KEY_EDUCATION);
+                        UpdateEducation(education);
+                    }
                     setupEducationsUI();
                     break;
                 case Request_Code_Work_Experience_Edit:
-                    WorkExperience work = data.getParcelableExtra(WorkExperienceEdit.KEY_WORK_EXPERIENCE);
-                    UpdateWorkExperience(work);
+                    String WorkID = data.getStringExtra(WorkExperienceEdit.KEY_WORK_EXPERIENCE);
+                    if(WorkID != null){
+                        DeleteWorkExperience(WorkID);
+                    }else {
+                        WorkExperience work = data.getParcelableExtra(WorkExperienceEdit.KEY_WORK_EXPERIENCE);
+                        UpdateWorkExperience(work);
+                    }
                     setupWorkssUI();
                     break;
                 case Request_Code_Project_Edit:
-                    Project project = data.getParcelableExtra(ProjectEdit.KEY_PROJECT_EDIT);
-                    UpdateProject(project);
+                    String ProjectID = data.getStringExtra(ProjectEdit.KEY_PROJECT_EDIT);
+                    if(ProjectID != null){
+                        DeleteProject(ProjectID);
+                    }else {
+                        Project project = data.getParcelableExtra(ProjectEdit.KEY_PROJECT_EDIT);
+                        UpdateProject(project);
+                    }
                     setupProjectsUI();
                     break;
             }
@@ -121,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
         if (basicInfo.photo != null) {
             ImageLoad.loadImage(this, basicInfo.photo, userPicture);
         } else {
-            userPicture.setImageResource(R.drawable.my_pic);
+            userPicture.setImageResource(R.drawable.noimage);
         }
 
         findViewById(R.id.NameChange).setOnClickListener(new View.OnClickListener() {
@@ -324,6 +339,36 @@ public class MainActivity extends AppCompatActivity {
         }
         if (!found) {
             projects.add(p);
+        }
+        Data.save(this, MODEL_PROJECTS, projects);
+    }
+    /*
+     * Delete data:
+     * ************************************************************/
+    private void DeleteEducation(String id){
+        for (int i = 0; i < educations.size(); ++i) {
+            if (educations.get(i).id.equals(id)) {
+                educations.remove(i);
+                break;
+            }
+        }
+        Data.save(this, MODEL_EDUCATIONS,educations);
+    }
+    private void DeleteWorkExperience(String id){
+        for (int i = 0; i < workExperiences.size(); ++i) {
+            if (workExperiences.get(i).id.equals(id)) {
+                workExperiences.remove(i);
+                break;
+            }
+        }
+        Data.save(this, MODEL_EXPERIENCES, workExperiences);
+    }
+    private void DeleteProject(String id){
+        for (int i = 0; i < projects.size(); ++i) {
+            if (projects.get(i).id.equals(id)) {
+                projects.remove(i);
+                break;
+            }
         }
         Data.save(this, MODEL_PROJECTS, projects);
     }

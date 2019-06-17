@@ -28,6 +28,7 @@
     <string name="project_des">Project Description</string>
     <string name="edit_project">Edit Project</string>
     <string name="add_project">Add Project</string>
+    <string name="delete">DELETE</string>
 
 
 </resources>
